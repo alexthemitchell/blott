@@ -1,0 +1,6 @@
+[package]
+name = "blott"
+version = "0.1.0"
+authors = ["Alex Mitchell <alex@alexthemitchell.com>"]
+
+[dependencies]
