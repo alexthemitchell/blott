@@ -3,6 +3,7 @@ use std::fs;
 
 mod hash;
 mod markdown;
+mod tweet;
 
 fn main() {
     for argument in env::args() {
