@@ -10,4 +10,4 @@ Cargo.lock
 **/*.rs.bk
 
 # Privates Strings don't belong in the repository
-**/private_strings.rs
+private_strings.rs
