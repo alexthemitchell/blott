@@ -1,5 +1,5 @@
-use std::fs::{self,File};
-use std::io::{self,Read};
+use std::fs::{self, File};
+use std::io::{self, Read};
 use std::path::PathBuf;
 
 mod post;
@@ -13,4 +13,3 @@ pub fn get_template(template: Template) -> String {
         Post => post::Template.to_string(),
     }
 }
-

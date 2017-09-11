@@ -5,8 +5,14 @@ mod private_strings;
 use self::egg_mode::tweet::*;
 
 fn get_token() -> egg_mode::Token<'static> {
-    let con_token = egg_mode::KeyPair::new(private_strings::TWITTER_CONSUMER_KEY, private_strings::TWITTER_CONSUMER_SECRET);
-    let access_token = egg_mode::KeyPair::new(private_strings::TWITTER_ACCESS_TOKEN, private_strings::TWITTER_ACCESS_TOKEN_SECRET);
+    let con_token = egg_mode::KeyPair::new(
+        private_strings::TWITTER_CONSUMER_KEY,
+        private_strings::TWITTER_CONSUMER_SECRET,
+    );
+    let access_token = egg_mode::KeyPair::new(
+        private_strings::TWITTER_ACCESS_TOKEN,
+        private_strings::TWITTER_ACCESS_TOKEN_SECRET,
+    );
     egg_mode::Token::Access {
         consumer: con_token,
         access: access_token,

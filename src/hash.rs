@@ -15,12 +15,12 @@ fn tagify_hash(hash: Hash) -> String {
     tweetsafe_hash[0..7].to_string().to_uppercase()
 }
 
-pub fn hash(contents: &[u8]) -> String {
+fn hash(contents: &[u8]) -> String {
     let mut hasher = seahash::SeaHasher::new();
     hasher.write(contents);
     tagify_hash(hasher.finish())
 }
 
-pub fn hashtag(contents: &[u8]) -> String {
-    format!("{}{}", "#", hash(contents))
+pub fn hashtag(contents: String) -> String {
+    format!("{}{}", "#", hash(contents.as_bytes()))
 }
