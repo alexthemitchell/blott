@@ -22,5 +22,5 @@ fn hash(contents: &[u8]) -> String {
 }
 
 pub fn hashtag(contents: String) -> String {
-    format!("{}{}", "#", hash(contents.as_bytes()))
+    hash(contents.as_bytes())
 }
