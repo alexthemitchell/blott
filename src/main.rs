@@ -3,12 +3,11 @@ extern crate clap;
 extern crate time;
 
 use std::any::Any;
-use std::fs::File;
-use std::io::Write;
 use std::path::PathBuf;
 
 mod render;
 mod tweet;
+mod publish;
 
 static DATE_FORMAT: &'static str = "%A, %B %e, %Y %H:%M";
 
@@ -26,8 +25,14 @@ fn main() {
         ).get_matches();
 
     let input = matches.value_of("INPUT").unwrap();
-    let title = matches.value_of("TITLE").unwrap_or(&default_title()).to_string();
-    let output = matches.value_of("OUTPUT").unwrap_or(&default_output_filename(title.clone())).to_string();
+    let title = matches
+        .value_of("TITLE")
+        .unwrap_or(&default_title())
+        .to_string();
+    let output = matches
+        .value_of("OUTPUT")
+        .unwrap_or(&default_output_filename(title.clone()))
+        .to_string();
 
     let mut path = PathBuf::new();
     path.push(input);
@@ -35,32 +40,26 @@ fn main() {
     match render::render_post(title.clone(), path) {
         Ok((html, hashtag)) => {
             match matches.occurrences_of("STDOUT") {
-                1 => println!("Hashtag: #{}\nOutput:\n{}",hashtag, html),
+                1 => println!("Hashtag: #{}\nOutput:\n{}", hashtag, html),
                 _ => {
-                    match File::create(output) {
-                        Ok(mut output_file) =>  {
-                            match output_file.write(html.as_bytes()) {
-                                Ok(_) => {
-                                    let tweet_text = format!("\"{}\" by @alexthemitchell. #{}", title, hashtag);
-                                    match matches.occurrences_of("NOTWEET") {
-                                        1 => println!("Not Tweeted: {}", tweet_text),
-                                        _ => {
-                                            match tweet::tweet(&tweet_text) {
-                                                Ok(_) => println!("Tweeted: {}", tweet_text),
-                                                Err(e)       => handle_error(&e),
-                                            }
-                                        },
+                    match publish::publish_file(&output, html) {
+                        Ok(url) => {
+                            let tweet_text =
+                                format!("\"{}\" by @alexthemitchell. {} #{}", title, url, hashtag);
+                            match matches.occurrences_of("NOTWEET") {
+                                1 => println!("Not Tweeted: {}", tweet_text),
+                                _ => {
+                                    match tweet::tweet(&tweet_text) {
+                                        Ok(_) => println!("Tweeted: {}", tweet_text),
+                                        Err(e) => handle_error(&e),
                                     }
-                                },
-                                Err(e) => handle_error(&e),
+                                }
                             }
-                        },
+                        }
                         Err(e) => handle_error(&e),
                     }
-                    
                 }
             }
-
         }
         Err(e) => handle_error(&e),
     }
@@ -69,11 +68,11 @@ fn main() {
 fn default_title() -> String {
     let now = time::now();
     let time_string = now.strftime(DATE_FORMAT).unwrap();
-    format!("{}",time_string)
+    format!("{}", time_string)
 }
 
 fn default_output_filename(title: String) -> String {
-    format!("{}.html",&title)
+    format!("{}.html", &title)
 }
 
 fn handle_error(error: &Any) {
