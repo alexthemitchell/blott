@@ -42,7 +42,7 @@ fn main() {
             match matches.occurrences_of("STDOUT") {
                 1 => println!("Hashtag: #{}\nOutput:\n{}", hashtag, html),
                 _ => {
-                    match publish::publish_file(&output, html) {
+                    match publish::publish_file(&output, &html) {
                         Ok(url) => {
                             let tweet_text =
                                 format!("\"{}\" by @alexthemitchell. {} #{}", title, url, hashtag);
