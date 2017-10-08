@@ -5,7 +5,7 @@ mod private_strings;
 use self::s3::bucket::Bucket;
 use self::s3::credentials::Credentials;
 
-use self::private_strings::{ ACCESS_KEY_ID, SECRET_ACCESS_KEY, BUCKET_NAME, BASE_URL, REGION };
+use self::private_strings::{ACCESS_KEY_ID, SECRET_ACCESS_KEY, BUCKET_NAME, BASE_URL, REGION};
 
 use std::result;
 
@@ -31,11 +31,9 @@ fn url_from_filename(name: &str) -> URL {
 
 fn publish_to_bucket(bucket: Bucket, name: &str, contents: &str) -> Result<URL> {
     match bucket.put(name, contents.as_bytes(), "text/html") {
-        Ok(_) => {
-            Ok(url_from_filename(name))
-        }
+        Ok(_) => Ok(url_from_filename(name)),
         Err(e) => Err(PublishError::S3(e)),
-   }
+    }
 }
 
 pub fn publish_file(name: &str, contents: &str) -> Result<URL> {
