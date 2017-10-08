@@ -30,7 +30,7 @@ fn url_from_filename(name: &str) -> URL {
 }
 
 fn publish_to_bucket(bucket: Bucket, name: &str, contents: &str) -> Result<URL> {
-    match bucket.put(name, contents.as_bytes(), "text/plain") {
+    match bucket.put(name, contents.as_bytes(), "text/html") {
         Ok(_) => {
             Ok(url_from_filename(name))
         }

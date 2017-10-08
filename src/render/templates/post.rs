@@ -1,4 +1,5 @@
-pub static TEMPLATE: &'static str = "<html>
+pub static TEMPLATE: &'static str = "<!DOCTYPE html>
+<html>
   <head>
     <title>{{ title }} | blott</title>
   </head>
