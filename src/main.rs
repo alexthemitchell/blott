@@ -9,7 +9,7 @@ mod render;
 mod tweet;
 mod publish;
 
-static DATE_FORMAT: &'static str = "%A, %B %e, %Y %H:%M";
+static DATE_FORMAT: &'static str = "%A, %B %e, %Y@%H:%M";
 
 fn main() {
     let matches = clap_app!
@@ -72,7 +72,9 @@ fn default_title() -> String {
 }
 
 fn default_output_filename(title: String) -> String {
-    format!("{}.html", &title)
+    let trimmed = title.trim();
+    let no_whitespace = trimmed.replace(" ","");
+    format!("{}.html", &no_whitespace)
 }
 
 fn handle_error(error: &Any) {
